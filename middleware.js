@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken');
+const response = require('response');
 const secret = process.env.authSecret;
 
 var helper = {};
@@ -24,19 +25,21 @@ helper.getUser = (req,res,next)=>{
 }
 
 helper.allowIfAuthenticated = (req,res,next)=>{
+  var respCtx = new response(req,res);
   if(req.authenticated)
     next();
   else{
-    res.status(401).json({err: "Unauthorized"});
+    respCtx.customResponse(401,"Unauthorized",null);
   }
 }
 
 helper.allowByRole = function(roleList){
   return (req,res,next)=>{
+    var respCtx = new response(req,res);
     if(roleList.indexOf(req.user.role) > -1)
       next();
     else{
-      res.status(401).json(err: "Unauthorized"});
+      respCtx.customResponse(401,"Unauthorized",null);
     }
   }
 }
