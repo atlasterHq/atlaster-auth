@@ -3,7 +3,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 const secret = process.env.authSecret;
-const rounds = process.env.hashRounds;
+const rounds = parseInt(process.env.hashRounds);
 
 var helper = {};
 
@@ -49,14 +49,14 @@ helper.validatePassword = (body)=>{
     bcrypt.compare(body.password,body.user.password,(err,res)=>{
       if(err || res == false) reject(new Error("Invalid credentials"));
       else fullfill(body.user.toObject());
-    }
+    });
   });
 }
 
 helper.genToken = (user)=>{
   return new Promise((fullfill,reject)=>{
     try{
-      var token = jwt.encode(user,secret);
+      var token = jwt.sign(user,secret);
       var resp = {key: token,role: user.role};
       fullfill(resp);
     }catch(ex){
