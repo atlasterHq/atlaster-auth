@@ -22,3 +22,23 @@ helper.getUser = (req,res,next)=>{
     next();
   }
 }
+
+helper.allowIfAuthenticated = (req,res,next)=>{
+  if(req.authenticated)
+    next();
+  else{
+    res.status(401).json({err: "Unauthorized"});
+  }
+}
+
+helper.allowByRole = function(roleList){
+  return (req,res,next)=>{
+    if(roleList.indexOf(req.user.role) > -1)
+      next();
+    else{
+      res.status(401).json(err: "Unauthorized"});
+    }
+  }
+}
+
+module.exports = helper;
