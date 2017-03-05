@@ -79,6 +79,15 @@ helper.validatePassword = (body)=>{
   });
 }
 
+helper.isActive = (user)=>{
+  return new Promise((fullfill,reject)=>{
+    if(user.is_active)
+      fullfill(user);
+    else
+      reject(new Error("NOT ACTIVE"));
+  });
+}
+
 helper.genToken = (user)=>{
   return new Promise((fullfill,reject)=>{
     try{

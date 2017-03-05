@@ -27,6 +27,7 @@ route.post("/token",(req,res,next)=>{
   var respCtx = new response(req,res);
   helper.getUser(req.body)
     .then(helper.validatePassword)
+    .then(helper.isActive)
     .then(helper.genToken)
     .then(respCtx.list)
     .catch(respCtx.err);
