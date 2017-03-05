@@ -17,7 +17,7 @@ helper.getUser = (req,res,next)=>{
         req.authenticated = true;
         next();
       }
-    }
+    });
   }else{
     req.authenticated = false;
     next();
