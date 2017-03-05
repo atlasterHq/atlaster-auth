@@ -2,6 +2,7 @@ const user = require('../models/user');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
+const mailer = require('mailer');
 
 const secret = process.env.authSecret;
 const rounds = parseInt(process.env.hashRounds);
@@ -30,6 +31,18 @@ helper.signupVerificationToken = (body)=>{
         fullfill(body);
       }
     });
+  });
+}
+
+helper.sendVerificationMail = (body)=>{
+  return new Promise((fullfill,reject)=>{
+    var ctx = {};
+    ctx.from = "signup";
+    ctx.to_email = body.email;
+    ctx.token = body.signup_token;
+    mailer(ctx,'high',4)
+      .then(fullfill(body))
+      .catch(reject);
   });
 }
 

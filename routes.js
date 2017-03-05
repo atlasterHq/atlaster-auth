@@ -11,6 +11,7 @@ route.post("/",(req,res,next)=>{
   helper.hashPassword(ctx)
     .then(helper.signupVerificationToken)
     .then(helper.signup)
+    .then(helper.sendVerificationMail)
     .then(respCtx.insert)
     .catch(respCtx.err);
 });
