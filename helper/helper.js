@@ -58,6 +58,18 @@ helper.getUser = (body)=>{
   });
 }
 
+helper.verifyUser = (body)=>{
+  return new Promise((fullfill,reject)=>{
+    if(body.signup_token == body.user.signup_token){
+      body.user.is_active = true;
+      body.user.save();
+      fullfill();
+    }
+    else
+      reject(new Error("Invalid user token");
+  });
+}
+
 helper.validatePassword = (body)=>{
   return new Promise((fullfill,reject)=>{
     bcrypt.compare(body.password,body.user.password,(err,res)=>{

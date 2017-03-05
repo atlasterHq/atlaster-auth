@@ -15,6 +15,14 @@ route.post("/",(req,res,next)=>{
     .catch(respCtx.err);
 });
 
+route.post("/verify",(req,res,next)=>{
+  var respCtx = new response(req,res);
+  helper.getUser(req.body)
+    .then(helper.verifyUser)
+    .then(respCtx.ok)
+    .catch(respCtx.err);
+});
+
 route.post("/token",(req,res,next)=>{
   var respCtx = new response(req,res);
   helper.getUser(req.body)
