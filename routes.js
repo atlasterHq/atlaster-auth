@@ -1,5 +1,5 @@
 const express  = require('express');
-const helper   = require('./helper/helper');
+const helper   = require('auth/helper/helper');
 const response = require('response');
 var route = express.Router();
 

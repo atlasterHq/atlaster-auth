@@ -1,4 +1,4 @@
-const user = require('../models/user');
+const user = require('auth/models/user');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
@@ -40,6 +40,7 @@ helper.sendVerificationMail = (body)=>{
     ctx.from = "signup";
     ctx.to_email = body.email;
     ctx.token = body.signup_token;
+    console.log(ctx);
     mailer(ctx,'high',4)
       .then(fullfill(body))
       .catch(reject);

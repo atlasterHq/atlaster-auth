@@ -13,7 +13,12 @@ db.on('error', console.error.bind(console, 'connection error:'));
 var app = express();
 
 app.use(parser.json());
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
+  next();
+});
 
-app.use("/user",require('./routes.js'));
+app.use("/users",require('./routes.js'));
 
 app.listen(3000);
