@@ -79,7 +79,7 @@ helper.verifyUser = (body)=>{
       fullfill();
     }
     else
-      reject(new Error("Invalid user token");
+      reject(new Error("Invalid user token"));
   });
 }
 
