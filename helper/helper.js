@@ -1,6 +1,7 @@
 const user = require('../models/user');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const crypto = require('crypto');
 
 const secret = process.env.authSecret;
 const rounds = parseInt(process.env.hashRounds);
@@ -13,6 +14,19 @@ helper.hashPassword = (body)=>{
       if(err) reject(err);
       else{
         body.password = hash;
+        fullfill(body);
+      }
+    });
+  });
+}
+
+helper.signupVerificationToken = (body)=>{
+  return new Promise((fullfill,reject)=>{
+    crypto.randomBytes(60,(err,buffer)=>{
+      if(err) reject(err);
+      else{
+        body.signup_token = buffer.toString('hex');
+        body.created = new Date();
         fullfill(body);
       }
     });

@@ -9,6 +9,7 @@ route.post("/",(req,res,next)=>{
   ctx.email = req.body.email;
   ctx.password = req.body.password;
   helper.hashPassword(ctx)
+    .then(helper.signupVerificationToken)
     .then(helper.signup)
     .then(respCtx.insert)
     .catch(respCtx.err);

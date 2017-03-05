@@ -8,6 +8,7 @@ var userSchema = new Schema({
   username: {type: String},
   role: {type: String, default: "user"},
   is_active: {type: Boolean, default: false},
+  signup_token: {type: String},
   created: {type: Date}
 });
 
