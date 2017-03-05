@@ -5,7 +5,10 @@ var route = express.Router();
 
 route.post("/",(req,res,next)=>{
   var respCtx = new response(req,res);
-  helper.hashPassword(req.body)
+  var ctx = {};
+  ctx.email = req.body.email;
+  ctx.password = req.body.password;
+  helper.hashPassword(ctx)
     .then(helper.signup)
     .then(respCtx.insert)
     .catch(respCtx.err);
