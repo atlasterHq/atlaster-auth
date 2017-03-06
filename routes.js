@@ -1,9 +1,9 @@
-const express  = require('express');
-const helper   = require('auth/helper/helper');
-const response = require('response');
+var express  = require('express');
+var helper   = require('auth/helper/helper');
+var response = require('response');
 var route = express.Router();
 
-route.post("/",(req,res,next)=>{
+route.post("/",function(req,res){
   var respCtx = new response(req,res);
   var ctx = {};
   ctx.email = req.body.email;
@@ -16,7 +16,7 @@ route.post("/",(req,res,next)=>{
     .catch(respCtx.err);
 });
 
-route.post("/verify",(req,res,next)=>{
+route.post("/verify",function(req,res){
   var respCtx = new response(req,res);
   helper.getUser(req.body)
     .then(helper.verifyUser)
@@ -24,7 +24,7 @@ route.post("/verify",(req,res,next)=>{
     .catch(respCtx.err);
 });
 
-route.post("/token",(req,res,next)=>{
+route.post("/token",function(req,res){
   var respCtx = new response(req,res);
   helper.getUser(req.body)
     .then(helper.validatePassword)

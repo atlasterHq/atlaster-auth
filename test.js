@@ -1,6 +1,6 @@
-const express = require('express');
-const mongoose = require('mongoose');
-const parser   = require('body-parser');
+var express = require('express');
+var mongoose = require('mongoose');
+var parser   = require('body-parser');
 
 process.env.authSecret = "testSecret";
 process.env.rounds = 8;
