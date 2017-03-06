@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+var mongoose = require('mongoose');
 require('mongoose-type-email');
 var Schema = mongoose.Schema;
 
