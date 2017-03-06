@@ -1,9 +1,8 @@
 var mongoose = require('mongoose');
-require('mongoose-type-email');
 var Schema = mongoose.Schema;
 
 var userSchema = new Schema({
-  email: {type: mongoose.SchemaTypes.Email, required: true},
+  email: {type: String , required: true},
   password: {type: String, required: true},
   username: {type: String},
   role: {type: String, default: "user"},
