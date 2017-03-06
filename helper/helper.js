@@ -7,7 +7,7 @@ var mailer = require('mailer');
 var secret = process.env.authSecret;
 var rounds = 8;
 
-var Promise = global.promise;
+var Promise = global.Promise;
 
 var helper = {};
 
