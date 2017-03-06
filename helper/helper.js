@@ -1,30 +1,36 @@
-const user = require('auth/models/user');
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-const crypto = require('crypto');
-const mailer = require('mailer');
+var user = require('auth/models/user');
+var bcrypt = require('bcryptjs');
+var jwt = require('jsonwebtoken');
+var crypto = require('crypto');
+var mailer = require('mailer');
 
-const secret = process.env.authSecret;
-const rounds = parseInt(process.env.hashRounds);
+var secret = process.env.authSecret;
+var rounds = 8;
+
+var Promise = global.promise;
 
 var helper = {};
 
-helper.hashPassword = (body)=>{
-  return new Promise((fullfill,reject)=>{
-    bcrypt.hash(body.password,rounds,(err,hash)=>{
-      if(err) reject(err);
+helper.hashPassword = function(body){
+  return new Promise(function(fullfill,reject){
+    bcrypt.hash(body.password,rounds,function(err,hash){
+      if(err){
+        reject(err);
+      }
       else{
         body.password = hash;
         fullfill(body);
       }
     });
   });
-}
+};
 
-helper.signupVerificationToken = (body)=>{
-  return new Promise((fullfill,reject)=>{
-    crypto.randomBytes(60,(err,buffer)=>{
-      if(err) reject(err);
+helper.signupVerificationToken = function(body){
+  return new Promise(function(fullfill,reject){
+    crypto.randomBytes(60,function(err,buffer){
+      if(err){
+        reject(err);
+      }
       else{
         body.signup_token = buffer.toString('hex');
         body.created = new Date();
@@ -32,10 +38,10 @@ helper.signupVerificationToken = (body)=>{
       }
     });
   });
-}
+};
 
-helper.sendVerificationMail = (body)=>{
-  return new Promise((fullfill,reject)=>{
+helper.sendVerificationMail = function(body){
+  return new Promise(function(fullfill,reject){
     var ctx = {};
     ctx.from = "signup";
     ctx.to_email = body.email;
@@ -45,24 +51,25 @@ helper.sendVerificationMail = (body)=>{
       .then(fullfill(body))
       .catch(reject);
   });
-}
+};
 
-helper.signup = (body)=>{
-  return new Promise((fullfill,reject)=>{
+helper.signup = function(body){
+  return new Promise(function(fullfill,reject){
     new user(body)
       .save()
       .then(fullfill)
       .catch(reject);
   });
-}
+};
 
-helper.getUser = (body)=>{
-  return new Promise((fullfill,reject)=>{
+helper.getUser = function(body){
+  return new Promise(function(fullfill,reject){
     user
       .findOne({email: body.email})
-      .then((user)=>{
-        if(user == null)
+      .then(function(user){
+        if(user === null){
           reject(new Error("No user found"));
+        }
         else{
           body.user = user;
           fullfill(body);
@@ -70,40 +77,47 @@ helper.getUser = (body)=>{
       })
       .catch(reject);
   });
-}
+};
 
-helper.verifyUser = (body)=>{
-  return new Promise((fullfill,reject)=>{
-    if(body.signup_token == body.user.signup_token){
+helper.verifyUser = function(body){
+  return new Promise(function(fullfill,reject){
+    if(body.signup_token === body.user.signup_token){
       body.user.is_active = true;
       body.user.save();
       fullfill();
     }
-    else
+    else{
       reject(new Error("Invalid user token"));
+    }
   });
-}
+};
 
-helper.validatePassword = (body)=>{
-  return new Promise((fullfill,reject)=>{
-    bcrypt.compare(body.password,body.user.password,(err,res)=>{
-      if(err || res == false) reject(new Error("Invalid credentials"));
-      else fullfill(body.user.toObject());
+helper.validatePassword = function(body){
+  return new Promise(function(fullfill,reject){
+    bcrypt.compare(body.password,body.user.password,function(err,res){
+      if(err || res === false){
+        reject(new Error("Invalid credentials"));
+      }
+      else{
+       fullfill(body.user.toObject());
+      }
     });
   });
-}
+};
 
-helper.isActive = (user)=>{
-  return new Promise((fullfill,reject)=>{
-    if(user.is_active)
+helper.isActive = function(user){
+  return new Promise(function(fullfill,reject){
+    if(user.is_active){
       fullfill(user);
-    else
+    }
+    else{
       reject(new Error("NOT ACTIVE"));
+    }
   });
-}
+};
 
-helper.genToken = (user)=>{
-  return new Promise((fullfill,reject)=>{
+helper.genToken = function(user){
+  return new Promise(function(fullfill,reject){
     try{
       var token = jwt.sign(user,secret);
       var resp = {key: token,role: user.role};
@@ -112,6 +126,6 @@ helper.genToken = (user)=>{
       reject(ex);
     }
   });
-}
+};
 
 module.exports = helper;
